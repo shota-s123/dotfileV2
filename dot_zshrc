@@ -138,6 +138,10 @@ setopt auto_pushd
 setopt pushd_ignore_dups
 # cd - で以前のディレクトリに移動
 setopt auto_cd
+# cdコマンド実行後に自動的にlsを実行する
+function cd() {
+  builtin cd "$@" && ls
+}
 
 # ===== 補完設定 =====
 # 大文字小文字を区別しない

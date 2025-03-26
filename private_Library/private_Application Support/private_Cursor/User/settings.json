@@ -1,0 +1,52 @@
+{
+    "vim.ignorecase": true,
+    "vim.smartcase": true,
+    "vim.hlsearch": true,
+    "vim.incsearch": true,
+    "vim.autoindent": true,
+    "vim.expandtab": true,
+    "vim.tabstop": 4,
+    "vim.shiftwidth": 4,
+    "vim.clipboard": "unnamedplus",
+    "vim.useSystemClipboard": true,
+    "vim.insertModeKeyBindings": [
+      {"before": ["j", "j"], "after": ["<Esc>"]}
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+      {"before": [";"], "after": [":"]},
+      {"before": [":"], "after": [";"]},
+      {"before": ["<S-h>"], "after": ["^"]},
+      {"before": ["<S-l>"], "after": ["$"]},
+      {"before": ["j"], "after": ["g", "j"]},
+      {"before": ["k"], "after": ["g", "k"]},
+      {"before": ["<Tab>"], "after": ["%"]},
+      {"before": ["<C-h>"], "after": ["<C-w>", "h"]},
+      {"before": ["<C-j>"], "after": ["<C-w>", "j"]},
+      {"before": ["<C-k>"], "after": ["<C-w>", "k"]},
+      {"before": ["<C-l>"], "after": ["<C-w>", "l"]}
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+      {"before": ["v"], "after": ["$", "h"]},
+      {"before": ["<Tab>"], "after": ["%"]}
+    ],
+    "vim.handleKeys": {
+      "<C-f>": false,
+      "<C-d>": false
+    },
+    "editor.renderWhitespace": "all",
+    "editor.lineNumbers": "on",
+    "editor.wordWrap": "on",
+    "editor.rulers": [80],
+    "editor.matchBrackets": "always",
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.autoClosingBrackets": "always",
+    "editor.minimap.enabled": false,
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.smoothScrolling": true,
+    "files.autoSave": "off",
+    "files.backup": false,
+    "files.hotExit": "onExit",
+    "files.trimTrailingWhitespace": true,
+    "editor.tabSize": 4
+  }
