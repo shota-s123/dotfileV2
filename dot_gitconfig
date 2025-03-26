@@ -1,0 +1,21 @@
+[user]
+    name = Shota Sato
+    email = shota.sato.m@gmail.com
+
+# Referred to https://qiita.com/peccul/items/90dd469e2f72babbc106
+[alias]
+    a = add
+    b = branch
+    bn = rev-parse --abbrev-ref HEAD
+    cancel = reset HEAD^ --soft
+    cm = commit
+    ck = checkout 
+    ps = push
+    pl = pull
+    st = status
+    stash = stash save
+    suba = submodule add
+    subit = submodule init
+    subup = submodule foreach git pull origin master
+    unstage = reset HEAD
+

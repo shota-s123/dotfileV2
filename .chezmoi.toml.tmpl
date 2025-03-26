@@ -1,0 +1,21 @@
+# chezmoi設定ファイル
+
+# スクリプトの実行順序を制御
+[scriptOrder]
+  # run_onceスクリプトを最初に実行
+  "run_once_install-oh-my-zsh.sh" = 10
+
+# データセクション
+[data]
+  # ユーザー情報
+  name = "{{ .chezmoi.username }}"
+  email = "{{ .chezmoi.username }}@example.com" # 必要に応じて変更してください
+
+  # oh-my-zsh関連
+  [data.ohmyzsh]
+    install = true
+    plugins = [
+      "zsh-autosuggestions",
+      "zsh-syntax-highlighting",
+      "zsh-completions"
+    ]
