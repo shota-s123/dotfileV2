@@ -1,4 +1,10 @@
 {
+    "vim.leader": "<Space>",
+    "vim.repeat": true,
+    "vim.repeatMotion": true,
+    "editor.autoIndent": "full",
+    "editor.acceptSuggestionOnEnter": "off",
+    "vim.surround": true,
     "vim.ignorecase": true,
     "vim.smartcase": true,
     "vim.hlsearch": true,
@@ -23,15 +29,69 @@
       {"before": ["<C-h>"], "after": ["<C-w>", "h"]},
       {"before": ["<C-j>"], "after": ["<C-w>", "j"]},
       {"before": ["<C-k>"], "after": ["<C-w>", "k"]},
-      {"before": ["<C-l>"], "after": ["<C-w>", "l"]}
+      {"before": ["<C-l>"], "after": ["<C-w>", "l"]},
+
+      // コードジャンプ
+      {"before": ["<C-o>"], "command": "workbench.action.navigateBack"},
+      {"before": ["<C-i>"], "command": "workbench.action.navigateForward"},
+      {"before": ["<C-S-o>"], "after": ["<C-o>"]},
+      {"before": ["<C-S-i>"], "after": ["<C-i>"]},
+
+      // メソッドジャンプ
+      {"before": ["[", "m"], "command": "editor.action.previousMethodAction"},
+      {"before": ["]", "m"], "command": "editor.action.nextMethodAction"},
+
+      // 変更箇所ジャンプ
+      {"before": ["[", "c"], "command": "workbench.action.editor.previousChange"},
+      {"before": ["]", "c"], "command": "workbench.action.editor.nextChange"},
+
+      // エラージャンプ
+      {"before": ["[", "e"], "command": "editor.action.marker.prev"},
+      {"before": ["]", "e"], "command": "editor.action.marker.next"},
+
+      // 空行追加
+      {"before": ["[", "<Space>"], "after": ["O", "<Esc>", "j"]},
+      {"before": ["]", "<Space>"], "after": ["o", "<Esc>", "k"]},
+
+      // タグジャンプ
+      {"before": ["K"], "command": "editor.action.showHover"},
+      {"before": ["g", "j", "K"], "command": "editor.action.goToDeclaration"},
+      {"before": ["g", "j", "k"], "command": "editor.action.goToTypeDefinition"},
+      {"before": ["g", "j", "i"], "command": "editor.action.goToImplementation"},
+      {"before": ["g", "j", "s"], "command": "editor.action.goToReferences"},
+      {"before": ["g", "j", "t"], "command": "editor.action.goToTest"},
+      {"before": ["<C-k>"], "command": "editor.action.referenceSearch.trigger"},
+
+      // 代替タグジャンプ（元のキーバインドを維持しつつ追加）
+      {"before": ["<Space>", "j", "d"], "command": "editor.action.goToDeclaration"},
+      {"before": ["<Space>", "j", "t"], "command": "editor.action.goToTypeDefinition"},
+      {"before": ["<Space>", "j", "i"], "command": "editor.action.goToImplementation"},
+      {"before": ["<Space>", "j", "r"], "command": "editor.action.goToReferences"},
+      {"before": ["<Space>", "j", "T"], "command": "editor.action.goToTest"},
+
+      // ショートカット
+      {"before": ["<Space>", "a"], "command": "workbench.action.showCommands"},
+      {"before": ["<Space>", "G"], "command": "editor.action.quickFix"},
+      {"before": ["<Space>", "g", "n"], "command": "workbench.action.files.newUntitledFile"},
+      {"before": ["<Space>", "="], "command": "editor.action.formatDocument"},
+      {"before": ["<Space>", "o"], "command": "workbench.action.gotoSymbol"},
+      {"before": ["<Space>", "q"], "command": "workbench.action.closeActiveEditor"},
+      {"before": ["<Space>", "Q"], "command": "workbench.action.reopenClosedEditor"},
+      {"before": ["<Space>", "e"], "command": "workbench.action.quickOpen"},
+      {"before": ["<Space>", "f"], "command": "workbench.action.quickOpen"},
+      {"before": ["<Space>", "F"], "command": "workbench.action.findInFiles"},
+      {"before": ["<Space>", "s"], "command": "workbench.action.showAllSymbols"},
+      {"before": ["<Space>", "S"], "command": "workbench.action.showAllSymbols"},
+      {"before": ["<Space>", "t"], "command": "workbench.action.terminal.toggleTerminal"},
+      {"before": ["<Space>", "P"], "command": "workbench.action.openRecent"},
+      {"before": ["<Space>", "b"], "command": "editor.debug.action.toggleBreakpoint"}
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
       {"before": ["v"], "after": ["$", "h"]},
       {"before": ["<Tab>"], "after": ["%"]}
     ],
     "vim.handleKeys": {
-      "<C-f>": false,
-      "<C-d>": false
+      "<C-f>": false
     },
     "editor.renderWhitespace": "all",
     "editor.lineNumbers": "on",
@@ -47,6 +107,5 @@
     "files.autoSave": "off",
     "files.backup": false,
     "files.hotExit": "onExit",
-    "files.trimTrailingWhitespace": true,
-    "editor.tabSize": 4
+    "files.trimTrailingWhitespace": true
   }
