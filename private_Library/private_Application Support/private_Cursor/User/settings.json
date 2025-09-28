@@ -32,59 +32,59 @@
       {"before": ["<C-l>"], "after": ["<C-w>", "l"]},
 
       // コードジャンプ
-      {"before": ["<C-o>"], "command": "workbench.action.navigateBack"},
-      {"before": ["<C-i>"], "command": "workbench.action.navigateForward"},
+      {"before": ["<C-o>"], "commands": ["workbench.action.navigateBack"]},
+      {"before": ["<C-i>"], "commands": ["workbench.action.navigateForward"]},
       {"before": ["<C-S-o>"], "after": ["<C-o>"]},
       {"before": ["<C-S-i>"], "after": ["<C-i>"]},
 
       // メソッドジャンプ
-      {"before": ["[", "m"], "command": "editor.action.previousMethodAction"},
-      {"before": ["]", "m"], "command": "editor.action.nextMethodAction"},
+      {"before": ["[", "m"], "commands": ["editor.action.previousMethodAction"]},
+      {"before": ["]", "m"], "commands": ["editor.action.nextMethodAction"]},
 
       // 変更箇所ジャンプ
-      {"before": ["[", "c"], "command": "workbench.action.editor.previousChange"},
-      {"before": ["]", "c"], "command": "workbench.action.editor.nextChange"},
+      {"before": ["[", "c"], "commands": ["workbench.action.editor.previousChange"]},
+      {"before": ["]", "c"], "commands": ["workbench.action.editor.nextChange"]},
 
       // エラージャンプ
-      {"before": ["[", "e"], "command": "editor.action.marker.prev"},
-      {"before": ["]", "e"], "command": "editor.action.marker.next"},
+      {"before": ["[", "e"], "commands": ["editor.action.marker.prev"]},
+      {"before": ["]", "e"], "commands": ["editor.action.marker.next"]},
 
       // 空行追加
       {"before": ["[", "<Space>"], "after": ["O", "<Esc>", "j"]},
       {"before": ["]", "<Space>"], "after": ["o", "<Esc>", "k"]},
 
       // タグジャンプ
-      {"before": ["K"], "command": "editor.action.showHover"},
-      {"before": ["g", "j", "K"], "command": "editor.action.goToDeclaration"},
-      {"before": ["g", "j", "k"], "command": "editor.action.goToTypeDefinition"},
-      {"before": ["g", "j", "i"], "command": "editor.action.goToImplementation"},
-      {"before": ["g", "j", "s"], "command": "editor.action.goToReferences"},
-      {"before": ["g", "j", "t"], "command": "editor.action.goToTest"},
-      {"before": ["<C-k>"], "command": "editor.action.referenceSearch.trigger"},
+      {"before": ["K"], "commands": ["editor.action.showHover"]},
+      {"before": ["g", "j", "K"], "commands": ["editor.action.goToDeclaration"]},
+      {"before": ["g", "j", "k"], "commands": ["editor.action.goToTypeDefinition"]},
+      {"before": ["g", "j", "i"], "commands": ["editor.action.goToImplementation"]},
+      {"before": ["g", "j", "s"], "commands": ["editor.action.goToReferences"]},
+      {"before": ["g", "j", "t"], "commands": ["editor.action.goToTest"]},
+      {"before": ["<C-k>"], "commands": ["editor.action.referenceSearch.trigger"]},
 
       // 代替タグジャンプ（元のキーバインドを維持しつつ追加）
-      {"before": ["<Space>", "j", "d"], "command": "editor.action.goToDeclaration"},
-      {"before": ["<Space>", "j", "t"], "command": "editor.action.goToTypeDefinition"},
-      {"before": ["<Space>", "j", "i"], "command": "editor.action.goToImplementation"},
-      {"before": ["<Space>", "j", "r"], "command": "editor.action.goToReferences"},
-      {"before": ["<Space>", "j", "T"], "command": "editor.action.goToTest"},
+      {"before": ["<Space>", "j", "d"], "commands": ["editor.action.goToDeclaration"]},
+      {"before": ["<Space>", "j", "t"], "commands": ["editor.action.goToTypeDefinition"]},
+      {"before": ["<Space>", "j", "i"], "commands": ["editor.action.goToImplementation"]},
+      {"before": ["<Space>", "j", "r"], "commands": ["editor.action.goToReferences"]},
+      {"before": ["<Space>", "j", "T"], "commands": ["editor.action.goToTest"]},
 
       // ショートカット
-      {"before": ["<Space>", "a"], "command": "workbench.action.showCommands"},
-      {"before": ["<Space>", "G"], "command": "editor.action.quickFix"},
-      {"before": ["<Space>", "g", "n"], "command": "workbench.action.files.newUntitledFile"},
-      {"before": ["<Space>", "="], "command": "editor.action.formatDocument"},
-      {"before": ["<Space>", "o"], "command": "workbench.action.gotoSymbol"},
-      {"before": ["<Space>", "q"], "command": "workbench.action.closeActiveEditor"},
-      {"before": ["<Space>", "Q"], "command": "workbench.action.reopenClosedEditor"},
-      {"before": ["<Space>", "e"], "command": "workbench.action.quickOpen"},
-      {"before": ["<Space>", "f"], "command": "workbench.action.quickOpen"},
-      {"before": ["<Space>", "F"], "command": "workbench.action.findInFiles"},
-      {"before": ["<Space>", "s"], "command": "workbench.action.showAllSymbols"},
-      {"before": ["<Space>", "S"], "command": "workbench.action.showAllSymbols"},
-      {"before": ["<Space>", "t"], "command": "workbench.action.terminal.toggleTerminal"},
-      {"before": ["<Space>", "P"], "command": "workbench.action.openRecent"},
-      {"before": ["<Space>", "b"], "command": "editor.debug.action.toggleBreakpoint"}
+      {"before": ["<Space>", "a"], "commands": ["workbench.action.showCommands"]},
+      {"before": ["<Space>", "G"], "commands": ["editor.action.quickFix"]},
+      {"before": ["<Space>", "g", "n"], "commands": ["workbench.action.files.newUntitledFile"]},
+      {"before": ["<Space>", "="], "commands": ["editor.action.formatDocument"]},
+      {"before": ["<Space>", "o"], "commands": ["workbench.action.gotoSymbol"]},
+      {"before": ["<Space>", "q"], "commands": ["workbench.action.closeActiveEditor"]},
+      {"before": ["<Space>", "Q"], "commands": ["workbench.action.reopenClosedEditor"]},
+      {"before": ["<Space>", "e"], "commands": ["workbench.action.quickOpen"]},
+      {"before": ["<Space>", "f"], "commands": ["workbench.action.quickOpen"]},
+      {"before": ["<Space>", "F"], "commands": ["workbench.action.findInFiles"]},
+      {"before": ["<Space>", "s"], "commands": ["workbench.action.showAllSymbols"]},
+      {"before": ["<Space>", "S"], "commands": ["workbench.action.showAllSymbols"]},
+      {"before": ["<Space>", "t"], "commands": ["workbench.action.terminal.toggleTerminal"]},
+      {"before": ["<Space>", "P"], "commands": ["workbench.action.openRecent"]},
+      {"before": ["<Space>", "b"], "commands": ["editor.debug.action.toggleBreakpoint"]}
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
       {"before": ["v"], "after": ["$", "h"]},
