@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ===== Amazon Q Developer CLI (pre) =====
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
 
 # ===== Homebrew設定 =====
 # Homebrewのパスを設定（M4 Mac用）
