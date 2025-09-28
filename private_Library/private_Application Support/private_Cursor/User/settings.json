@@ -102,10 +102,13 @@
     "editor.detectIndentation": false,
     "editor.autoClosingBrackets": "always",
     "editor.minimap.enabled": false,
-    "editor.cursorSmoothCaretAnimation": true,
     "editor.smoothScrolling": true,
-    "files.autoSave": "off",
+    "files.autoSave": "afterDelay",
     "files.backup": false,
     "files.hotExit": "onExit",
-    "files.trimTrailingWhitespace": true
+    "files.trimTrailingWhitespace": true,
+    "editor.tabSize": 4,
+    "workbench.settings.applyToAllProfiles": [],
+    "editor.fontSize": 14,
+    "git.autofetch": true,
   }
