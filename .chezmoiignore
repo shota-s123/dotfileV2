@@ -1,2 +1,6 @@
 ~/.local/share/nvim/lazy
 ~/.local/share/nvim/mason
+
+# Bootstrap script (not a dotfile)
+bootstrap.sh
+README.md
