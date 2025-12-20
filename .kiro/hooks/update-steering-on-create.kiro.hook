@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Steering 自動更新",
+  "description": "新しいファイルやフォルダが作成されたときに、dotfiles.md の steering ドキュメントを更新します。ファイル編集ごとではなく、新規作成時のみトリガーされるため、コストを抑えられます。",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": [
+      "*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "新しいファイルが作成されました。.kiro/steering/dotfiles.md のリポジトリ構造セクションを確認し、新しいファイル/フォルダを反映するように更新してください。chezmoi の命名規則（dot_, private_, run_once_ など）に従って説明を追加してください。"
+  }
+}

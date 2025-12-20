@@ -257,3 +257,5 @@ fi
 setopt correct
 # ビープ音を無効化
 unsetopt beep
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"

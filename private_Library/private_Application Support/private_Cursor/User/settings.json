@@ -111,4 +111,5 @@
     "workbench.settings.applyToAllProfiles": [],
     "editor.fontSize": 14,
     "git.autofetch": true,
+    "editor.multiCursorModifier": "ctrlCmd",
   }
