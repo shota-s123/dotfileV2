@@ -1,8 +1,12 @@
 #!/usr/bin/env zsh
 
-# ===== Amazon Q Developer CLI (pre) =====
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
 
+#
+ZSH_DISABLE_COMPFIX=true
+
+# ===== Amazon Q Developer CLI (pre) =====
 # ===== Homebrew設定 =====
 # Homebrewのパスを設定（M4 Mac用）
 if [[ -x /opt/homebrew/bin/brew ]]; then
@@ -11,46 +15,34 @@ elif [[ -x /usr/local/bin/brew ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-# ===== nvm設定 =====
+# ===== nvm設定（遅延読み込み） =====
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm() {
+  unfunction nvm node npm npx 2>/dev/null
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  nvm "$@"
+}
+node() { unfunction nvm node npm npx 2>/dev/null; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; node "$@" }
+npm() { unfunction nvm node npm npx 2>/dev/null; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; npm "$@" }
+npx() { unfunction nvm node npm npx 2>/dev/null; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; npx "$@" }
 
-# ===== pyenv設定 =====
-if [[ -d "$HOME/.pyenv" ]]; then
-  export PYENV_ROOT="$HOME/.pyenv"
-elif command -v pyenv >/dev/null 2>&1; then
-  export PYENV_ROOT="$(pyenv root 2>/dev/null)"
-fi
+# ===== pyenv設定（遅延読み込み） =====
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d "$PYENV_ROOT/bin" ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+pyenv() {
+  unfunction pyenv python python3 pip pip3 2>/dev/null
+  eval "$(command pyenv init - zsh)"
+  pyenv "$@"
+}
+python() { unfunction pyenv python python3 pip pip3 2>/dev/null; eval "$(command pyenv init - zsh)"; python "$@" }
+python3() { unfunction pyenv python python3 pip pip3 2>/dev/null; eval "$(command pyenv init - zsh)"; python3 "$@" }
+pip() { unfunction pyenv python python3 pip pip3 2>/dev/null; eval "$(command pyenv init - zsh)"; pip "$@" }
+pip3() { unfunction pyenv python python3 pip pip3 2>/dev/null; eval "$(command pyenv init - zsh)"; pip3 "$@" }
 
-if [[ -n "${PYENV_ROOT:-}" && -d "$PYENV_ROOT/bin" ]]; then
-  case ":$PATH:" in
-    *":$PYENV_ROOT/bin:"*) ;;
-    *) export PATH="$PYENV_ROOT/bin:$PATH" ;;
-  esac
-fi
-
-if command -v pyenv >/dev/null 2>&1; then
-  eval "$(pyenv init - zsh)"
-fi
-
-# ===== nodenv設定 =====
-if [[ -d "$HOME/.nodenv" ]]; then
-  export NODENV_ROOT="$HOME/.nodenv"
-elif command -v nodenv >/dev/null 2>&1; then
-  export NODENV_ROOT="$(nodenv root 2>/dev/null)"
-fi
-
-if [[ -n "${NODENV_ROOT:-}" && -d "$NODENV_ROOT/bin" ]]; then
-  case ":$PATH:" in
-    *":$NODENV_ROOT/bin:"*) ;;
-    *) export PATH="$NODENV_ROOT/bin:$PATH" ;;
-  esac
-fi
-
-if command -v nodenv >/dev/null 2>&1; then
-  eval "$(nodenv init -)"
-fi
+# ===== nodenv設定（nvmと重複のため無効化） =====
+# nvm を使用しているため nodenv は読み込まない
+# 必要になったら nvm を削除してこちらを有効化
 
 # ===== Oh My Zsh設定 =====
 # Path to your Oh My Zsh installation
@@ -66,14 +58,7 @@ elif [[ -d /usr/local/opt/fzf ]]; then
   export FZF_BASE="/usr/local/opt/fzf"
 fi
 
-# fzfのシェル統合を設定
-if [[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ]]; then
-  source /opt/homebrew/opt/fzf/shell/completion.zsh
-  source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
-elif [[ -f /usr/local/opt/fzf/shell/completion.zsh ]]; then
-  source /usr/local/opt/fzf/shell/completion.zsh
-  source /usr/local/opt/fzf/shell/key-bindings.zsh
-fi
+# fzfのシェル統合（後述のfzf設定セクションで読み込むためここではスキップ）
 
 # 自動更新の設定
 zstyle ':omz:update' mode auto
@@ -113,16 +98,25 @@ fpath=(${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions/src $fpath)
 
 # ===== zoxide設定 =====
 if (( $+commands[zoxide] )); then
+  # zoxide用fzfオプション（グローバルFZF_DEFAULT_OPTSを上書き）
+  export _ZO_FZF_OPTS='--height 40% --layout=reverse --border --no-sort --preview "echo {} | sed s/^[[:space:]]*[0-9.]*[[:space:]]*// | xargs ls -p --color=always" --header "zoxide: frecency score | path"'
+
   # zoxideの標準初期化
   eval "$(zoxide init zsh)"
 
-  # zoxideのインタラクティブモードをCtrl+uにバインド
-  function zoxide-jump-interactive() {
-    BUFFER="zi"
-    zle accept-line
+  # Ctrl+uでzoxideインタラクティブモード（zle widget経由）
+  function _zoxide_zi_widget() {
+    local result
+    result="$(zoxide query --list --score | fzf ${(z)_ZO_FZF_OPTS})" || return
+    local dir="${result##*[[:space:]]}"
+    if [[ -d "$dir" ]]; then
+      zoxide add "$dir"
+      BUFFER="builtin cd ${(q)dir}"
+      zle accept-line
+    fi
   }
-  zle -N zoxide-jump-interactive
-  bindkey '^u' zoxide-jump-interactive
+  zle -N _zoxide_zi_widget
+  bindkey '^u' _zoxide_zi_widget
 else
   echo "zoxide not found. Install with: brew install zoxide"
 fi
@@ -131,6 +125,8 @@ fi
 if (( $+commands[fzf] )); then
   # fzfの基本設定
   export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --preview 'cat {}'"
+  # 履歴検索: scheme=history で最近のコマンドを優先しつつマッチ品質も考慮
+  export FZF_CTRL_R_OPTS="--scheme=history --bind 'ctrl-r:toggle-sort' --header 'Ctrl-R: toggle sort'"
   export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
@@ -200,8 +196,8 @@ autoload -U add-zsh-hook
 add-zsh-hook chpwd _auto_ls
 
 # ===== 補完設定 =====
-# 大文字小文字を区別しない
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+# 大文字小文字を区別しない + 部分一致補完を有効化
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 # 補完メニューを有効化
 zstyle ':completion:*' menu select
 # キャッシュを有効化
@@ -229,8 +225,7 @@ alias gl='git pull'
 alias gd='git diff'
 alias gco='git checkout'
 alias gb='git branch'
-alias gpck='git branch -a --sort=-authordate | cut -b 3- | perl -pe '\''s#^remotes/origin/###'\'' | perl -nlE '\''say if !$c{$_}++'\'' | grep -v -- "-
->" | fzf --height 40% --layout=reverse --border --preview "git log --oneline --graph --color=always --max-count=10 {}" | xargs git checkout'
+alias gpck='git for-each-ref --sort=-authordate --format="%(refname:short)" refs/heads refs/remotes/origin | sed "s#^origin/##" | awk "!seen[\$0]++" | grep -v "HEAD" | fzf --height 40% --layout=reverse --border --preview "git log --oneline --graph --color=always --max-count=10 {}" | xargs git checkout'
 
 # その他
 alias zshrc='$EDITOR ~/.zshrc'
@@ -259,3 +254,9 @@ setopt correct
 unsetopt beep
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+eval "$(direnv hook zsh)"
+
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
