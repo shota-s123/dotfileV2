@@ -34,3 +34,12 @@ chezmoi edit <file>
 # 新しいファイルを追加
 chezmoi add <file>
 ```
+
+## Agent Instructions
+
+共通のエージェント向け指示は `dot_agent-shared/WORKSTYLE.md` で管理しています。
+
+- `~/.claude/CLAUDE.md` は `dot_claude/CLAUDE.md.tmpl` から生成
+- `~/AGENTS.md` は `AGENTS.md.tmpl` から生成
+
+更新時は `chezmoi edit .agent-shared/WORKSTYLE.md` かソースツリー上の `dot_agent-shared/WORKSTYLE.md` を編集して、`chezmoi apply` を実行します。
