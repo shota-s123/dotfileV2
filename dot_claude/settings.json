@@ -60,7 +60,8 @@
     "superpowers@claude-plugins-official": true,
     "document-skills@anthropic-agent-skills": true,
     "claude-api@anthropic-agent-skills": true,
-    "planning-with-files@planning-with-files": true
+    "planning-with-files@planning-with-files": true,
+    "codex@openai-codex": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
@@ -73,6 +74,12 @@
       "source": {
         "source": "github",
         "repo": "OthmanAdi/planning-with-files"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
       }
     }
   },
