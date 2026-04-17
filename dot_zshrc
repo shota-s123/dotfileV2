@@ -15,17 +15,10 @@ elif [[ -x /usr/local/bin/brew ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-# ===== nvm設定（遅延読み込み） =====
+# ===== nvm設定 =====
 export NVM_DIR="$HOME/.nvm"
-nvm() {
-  unfunction nvm node npm npx 2>/dev/null
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-  nvm "$@"
-}
-node() { unfunction nvm node npm npx 2>/dev/null; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; node "$@" }
-npm() { unfunction nvm node npm npx 2>/dev/null; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; npm "$@" }
-npx() { unfunction nvm node npm npx 2>/dev/null; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"; npx "$@" }
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # ===== pyenv設定（遅延読み込み） =====
 export PYENV_ROOT="$HOME/.pyenv"
@@ -104,19 +97,32 @@ if (( $+commands[zoxide] )); then
   # zoxideの標準初期化
   eval "$(zoxide init zsh)"
 
-  # Ctrl+uでzoxideインタラクティブモード（zle widget経由）
-  function _zoxide_zi_widget() {
-    local result
-    result="$(zoxide query --list --score | fzf ${(z)_ZO_FZF_OPTS})" || return
-    local dir="${result##*[[:space:]]}"
-    if [[ -d "$dir" ]]; then
-      zoxide add "$dir"
-      BUFFER="builtin cd ${(q)dir}"
-      zle accept-line
-    fi
-  }
-  zle -N _zoxide_zi_widget
-  bindkey '^u' _zoxide_zi_widget
+  if [[ "$TERM_PROGRAM" == "WarpTerminal" ]]; then
+    # Warp: ZLE widget が動作しないため、コマンドとして提供
+    function zz() {
+      local result
+      result="$(zoxide query --list --score | fzf ${(z)_ZO_FZF_OPTS})" || return
+      local dir="${result##*[[:space:]]}"
+      if [[ -d "$dir" ]]; then
+        zoxide add "$dir"
+        builtin cd "$dir"
+      fi
+    }
+  else
+    # Other terminals: Ctrl+uでzoxideインタラクティブモード（zle widget経由）
+    function _zoxide_zi_widget() {
+      local result
+      result="$(zoxide query --list --score | fzf ${(z)_ZO_FZF_OPTS})" || return
+      local dir="${result##*[[:space:]]}"
+      if [[ -d "$dir" ]]; then
+        zoxide add "$dir"
+        BUFFER="builtin cd ${(q)dir}"
+        zle accept-line
+      fi
+    }
+    zle -N _zoxide_zi_widget
+    bindkey '^u' _zoxide_zi_widget
+  fi
 else
   echo "zoxide not found. Install with: brew install zoxide"
 fi
@@ -226,6 +232,29 @@ alias gd='git diff'
 alias gco='git checkout'
 alias gb='git branch'
 alias gpck='git for-each-ref --sort=-authordate --format="%(refname:short)" refs/heads refs/remotes/origin | sed "s#^origin/##" | awk "!seen[\$0]++" | grep -v "HEAD" | fzf --height 40% --layout=reverse --border --preview "git log --oneline --graph --color=always --max-count=10 {}" | xargs git checkout'
+alias gclean='git fetch --prune && git branch -vv | grep ": gone]" | awk "{print \$1}" | xargs git branch -d'
+
+# Claude Code
+_claude_launch() {
+  if ! (( $+commands[claude] )); then
+    echo "claude が見つかりません。インストールしてください。"
+    return 1
+  fi
+  if [[ "$PWD" != "$HOME/workspace"* ]]; then
+    echo "現在 ~/workspace 配下ではありません: $PWD"
+    echo -n "~/workspace に移動して起動しますか? [Y/n] "
+    read -r ans
+    if [[ "$ans" =~ ^[Nn]$ ]]; then
+      command claude "$@"
+    else
+      cd ~/workspace && command claude "$@"
+    fi
+  else
+    command claude "$@"
+  fi
+}
+cc() { _claude_launch "$@" }
+claude() { _claude_launch "$@" }
 
 # その他
 alias zshrc='$EDITOR ~/.zshrc'
@@ -260,3 +289,6 @@ eval "$(direnv hook zsh)"
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+# Obsidian vault path
+export OBSIDIAN_VAULT="$HOME/workspace/my-kb-vault"

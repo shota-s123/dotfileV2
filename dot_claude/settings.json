@@ -1,6 +1,7 @@
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
   },
   "permissions": {
     "allow": [
@@ -8,9 +9,49 @@
       "Glob",
       "Grep",
       "WebSearch",
-      "WebFetch"
-    ]
+      "WebFetch",
+      "Edit",
+      "Write",
+      "NotebookEdit",
+      "Skill",
+      "ExitPlanMode",
+      "mcp__context7__*",
+      "mcp__terraform__*",
+      "mcp__aws-knowledge__*",
+      "mcp__drawio__*",
+      "mcp__memory__read_graph",
+      "mcp__memory__search_nodes",
+      "mcp__memory__open_nodes",
+      "mcp__memory__create_entities",
+      "mcp__memory__create_relations",
+      "mcp__memory__add_observations",
+      "mcp__obsidian__read_note",
+      "mcp__obsidian__read_multiple_notes",
+      "mcp__obsidian__search_notes",
+      "mcp__obsidian__get_notes_info",
+      "mcp__obsidian__get_frontmatter",
+      "mcp__obsidian__get_vault_stats",
+      "mcp__obsidian__list_directory",
+      "mcp__obsidian__list_all_tags",
+      "mcp__obsidian__write_note",
+      "mcp__obsidian__patch_note",
+      "mcp__obsidian__update_frontmatter",
+      "mcp__obsidian__manage_tags",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_network_requests",
+      "mcp__playwright__browser_tabs",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_navigate_back",
+      "mcp__playwright__browser_install",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_close"
+    ],
+    "defaultMode": "auto"
   },
+  "hooks": {},
   "statusLine": {
     "type": "command",
     "command": "zsh /Users/shota-s/.claude/statusline-command.sh"
@@ -35,29 +76,6 @@
       }
     }
   },
-  "effortLevel": "high",
-  "hooks": {
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/save-session-log.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/on-clear-save-log.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
-  }
+  "effortLevel": "xhigh",
+  "skipAutoPermissionPrompt": true
 }

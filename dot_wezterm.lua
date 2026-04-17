@@ -24,7 +24,7 @@ config.color_scheme = "Dracula (Official)"
 -- Window appearance
 -- ---------------------------------------------------------
 config.window_background_opacity = 0.92
-config.macos_window_background_blur = 20
+config.macos_window_background_blur = 14
 config.window_decorations = "RESIZE"
 config.window_padding = { left = 10, right = 10, top = 8, bottom = 8 }
 config.initial_cols = 140

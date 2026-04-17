@@ -2,7 +2,7 @@
 -- プラグイン管理設定
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
@@ -99,15 +99,16 @@ require("lazy").setup({
       vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
       vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
       vim.keymap.set("n", "<leader>fp", ":Telescope project<CR>", { noremap = true, silent = true })
+      vim.keymap.set("n", "<leader>fs", builtin.lsp_document_symbols, {})
+      vim.keymap.set("n", "<leader>gs", builtin.git_status, {}) -- Git変更ファイル一覧
+      vim.keymap.set("n", "<leader>fS", builtin.lsp_dynamic_workspace_symbols, {})
     end,
   },
 
-  -- LSP設定
+  -- LSP設定（Neovim 0.11 ネイティブ API）
   {
-    "neovim/nvim-lspconfig",
+    "williamboman/mason.nvim",
     dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
       "hrsh7th/nvim-cmp",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
@@ -128,10 +129,11 @@ require("lazy").setup({
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { 
-          "lua", "vim", "vimdoc", "python", "javascript", 
-          "typescript", "html", "css", "json", "markdown", 
-          "bash", "c", "cpp", "rust", "go"
+        ensure_installed = {
+          "lua", "vim", "vimdoc", "python", "javascript",
+          "typescript", "tsx", "html", "css", "json", "markdown",
+          "bash", "c", "cpp", "rust", "go",
+          "hcl", "terraform",
         },
         highlight = {
           enable = true,
@@ -204,6 +206,17 @@ require("lazy").setup({
         end,
       })
     end,
+  },
+
+  -- コードレビュー
+  {
+    "georgeguimaraes/review.nvim",
+    dependencies = {
+      "esmuellert/codediff.nvim",
+      "MunifTanjim/nui.nvim",
+    },
+    cmd = { "Review" },
+    opts = {},
   },
 
   -- 自動ペア
@@ -308,9 +321,6 @@ require("lazy").setup({
     end,
   },
 
-  -- ファイルタイプ検出の強化
-  { "nathom/filetype.nvim" },
-
   -- 通知
   {
     "rcarriga/nvim-notify",
@@ -362,21 +372,117 @@ require("lazy").setup({
     end,
   },
 
-  -- コードアクション
-  {
-    "weilbith/nvim-code-action-menu",
-    cmd = "CodeActionMenu",
-    config = function()
-      vim.keymap.set("n", "<leader>ca", ":CodeActionMenu<CR>", { noremap = true, silent = true })
-    end,
-  },
-
   -- スニペット
   {
     "L3MON4D3/LuaSnip",
     dependencies = { "rafamadriz/friendly-snippets" },
     config = function()
       require("luasnip.loaders.from_vscode").lazy_load()
+    end,
+  },
+
+  -- Claude Code 連携
+  {
+    "coder/claudecode.nvim",
+    dependencies = { "folke/snacks.nvim" },
+    config = true,
+    keys = {
+      { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
+      { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
+      { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
+      { "<leader>as", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send to Claude" },
+      { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
+    },
+  },
+
+  -- フォーマッター
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          javascript = { "prettier" },
+          javascriptreact = { "prettier" },
+          typescript = { "prettier" },
+          typescriptreact = { "prettier" },
+          css = { "prettier" },
+          html = { "prettier" },
+          json = { "prettier" },
+          markdown = { "prettier" },
+          terraform = { "terraform_fmt" },
+          tf = { "terraform_fmt" },
+          hcl = { "terraform_fmt" },
+          lua = { "stylua" },
+          python = { "ruff_format" },
+        },
+        format_on_save = {
+          timeout_ms = 3000,
+          lsp_format = "fallback",
+        },
+      })
+    end,
+  },
+
+  -- リンター
+  {
+    "mfussenegger/nvim-lint",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local lint = require("lint")
+      lint.linters_by_ft = {
+        javascript = { "eslint_d" },
+        javascriptreact = { "eslint_d" },
+        typescript = { "eslint_d" },
+        typescriptreact = { "eslint_d" },
+        terraform = { "tflint" },
+        tf = { "tflint" },
+      }
+      vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+        callback = function()
+          lint.try_lint()
+        end,
+      })
+    end,
+  },
+
+  -- JSX/HTMLタグ自動閉じ・リネーム
+  {
+    "windwp/nvim-ts-autotag",
+    event = { "InsertEnter" },
+    opts = {},
+  },
+
+  -- 診断一覧UI
+  {
+    "folke/trouble.nvim",
+    cmd = { "Trouble" },
+    keys = {
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics" },
+      { "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics" },
+    },
+    opts = {},
+  },
+
+  -- キーバインドヒント表示
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
+
+  -- IME 自動切替（Insert → Normal で英数に戻す）
+  {
+    "keaising/im-select.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("im_select").setup({
+        default_im_select = "com.apple.keylayout.ABC",
+        default_command = "macism",
+        set_default_events = { "VimEnter", "InsertLeave", "CmdlineLeave" },
+        set_previous_events = { "InsertEnter" },
+      })
     end,
   },
 })

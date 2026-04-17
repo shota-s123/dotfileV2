@@ -5,13 +5,12 @@ local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 local move_opts = { noremap = false, silent = true } -- 移動キー用のオプション
 
--- キーリピート設定
-vim.opt.timeoutlen = 300  -- キーマップのタイムアウト時間（ミリ秒）
-vim.opt.ttimeoutlen = 10  -- キーコードのタイムアウト時間（ミリ秒）
-
 -- リーダーキーの設定
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader = ','
+vim.g.maplocalleader = ','
+
+-- f/t の逆方向リピートを \ に退避
+keymap({'n', 'v'}, '\\', ',', opts)
 
 -- 入力モード中に素早くjjと入力した場合はESCとみなす
 keymap('i', 'jj', '<Esc>', opts)
@@ -30,16 +29,6 @@ keymap('n', 'g#', 'g#zz', opts)
 -- j, k による移動を折り返されたテキストでも自然に振る舞うように変更
 keymap('n', 'j', 'gj', move_opts)
 keymap('n', 'k', 'gk', move_opts)
-
--- h, l の移動も連続で行えるように設定
-keymap('n', 'h', 'h', move_opts)
-keymap('n', 'l', 'l', move_opts)
-
--- f, F, t, T による移動も連続で行えるように設定
-keymap('n', 'f', 'f', move_opts)
-keymap('n', 'F', 'F', move_opts)
-keymap('n', 't', 't', move_opts)
-keymap('n', 'T', 'T', move_opts)
 
 -- Shift + h/l で行頭/行末に移動
 keymap('n', '<S-h>', '^', opts)

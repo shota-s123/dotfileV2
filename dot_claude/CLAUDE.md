@@ -1,14 +1,20 @@
 # Global Instructions
 
 ## Communication
-- Respond in Japanese
-- Commit messages and code comments in English
+- Always respond in Japanese unless explicitly asked otherwise.
+- Be polite, clear, and practical.
+- Do not make unsupported assumptions; when uncertain, say so clearly.
+- Commit messages and code comments in Japanese
 
 ## Workflow
-- Read existing code before editing
-- Keep changes minimal and focused on the current request
+- Do not change any files without confirming.
+- Explain why you do that before you do something.
+- Inspect relevant files before editing.
+- Keep changes minimal and avoid unrelated refactors.
 - Match the existing style of the repository
+- Run the smallest meaningful verification after changes.
 - Never silently ignore errors — surface them explicitly
+- Do not commit or perform destructive actions unless explicitly asked.
 - Prefer non-interactive commands (e.g. `git --no-pager diff`)
 
 ## Information Lookup

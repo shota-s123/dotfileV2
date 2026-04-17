@@ -10,7 +10,7 @@ Inbox は一時置き場。あとで `/inbox-processor` が PARA に振り分け
 
 ## 保存先
 
-`/Users/shota-s/my-kb-vault/00_Inbox/`
+`~/workspace/my-kb-vault/00_Inbox/`（環境変数 `OBSIDIAN_VAULT` が設定されていればそちらを優先）
 
 ## 手順
 
@@ -30,9 +30,9 @@ tags:
   - ログ
   - [関連トピック1]
   - [関連トピック2]
+created: YYYY-MM-DDTHH:mm:ss+09:00
+source: claude-code
 ---
-
-# YYYY-MM-DD - [作業内容の要約]
 
 [2〜3文で何をしたか。背景・動機・現在の状況も含める]
 
